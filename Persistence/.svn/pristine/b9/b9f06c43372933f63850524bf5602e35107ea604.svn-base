@@ -1,0 +1,28 @@
+DROP keyspace homesecurity;
+CREATE KEYSPACE homesecurity;
+USE homesecurity;
+
+/***********************************************************
+ * Column Families: wide column,  two column families
+ *   indexed by composite key siteid-yyyyMMdd  to look up events
+ ***********************************************************/
+
+-- events column family stores mapping of homesite events
+-- row-key = <siteid>_<yyyyMMdd>
+-- column-key - <event timestamp>_<eventId>
+-- column-value = json string of event
+
+-- eventsByDate column family stores homestream events by date and hourl
+-- row-key = yyyyMMddHH
+-- column-key - <event timestamp>_<eventId>
+-- column-value = json string of event
+
+
+CREATE COLUMN FAMILY event
+WITH comparator = UTF8Type
+AND key_validation_class = UTF8Type
+AND default_validation_class = UTF8Type;
+
+/***********************************************************
+
+***********************************************************/

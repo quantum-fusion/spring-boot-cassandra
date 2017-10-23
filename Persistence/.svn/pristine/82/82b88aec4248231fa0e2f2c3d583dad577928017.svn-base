@@ -1,0 +1,40 @@
+package com.comcast.homesecurity.domain.pojo;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+
+public class Metadata {
+	String metadataValue, metadataName;
+	boolean withaction;
+
+	public boolean isWithaction() {
+		return withaction;
+	}
+
+	public void setWithaction(String withaction) {
+		this.withaction = Boolean.parseBoolean(withaction);
+	}
+
+	public String getMetadataValue() {
+		return metadataValue;
+	}
+
+	public void setMetadataValue(String metadataValue) {
+		this.metadataValue = metadataValue;
+	}
+
+	public String getMetadataName() {
+		return metadataName;
+	}
+
+	public void setMetadataName(String metadataName) {
+		this.metadataName = metadataName;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+}

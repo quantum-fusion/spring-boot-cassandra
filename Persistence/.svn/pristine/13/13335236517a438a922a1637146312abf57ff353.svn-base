@@ -1,0 +1,125 @@
+{
+    "functions": null,
+    "function": [],
+    "links": null,
+    "link": [],
+    "href": null,
+    "embed": null,
+    "createdAt": null,
+    "createdBy": null,
+    "modifiedAt": null,
+    "modifiedBy": null,
+    "entry": [
+        {
+            "cause": null,
+            "value": null,
+            "lastValue": null,
+            "metaData": [
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "temperatureOnly",
+                    "value": "false",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "systemOn",
+                    "value": "true",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "fanOn",
+                    "value": "true",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "hold",
+                    "value": "true",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "temperature",
+                    "value": "2516",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "occupiedCoolingSetpoint",
+                    "value": "1800",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "occupiedHeatingSetpoint",
+                    "value": "2550",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "systemMode",
+                    "value": "heat",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "fanMode",
+                    "value": "on",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "siteId",
+                    "value": "1819",
+                    "lastValue": null,
+                    "mediaType": null
+                }
+            ],
+            "mediaType": "event/thermostat",
+            "id": "473486",
+            "name": null,
+            "function": null,
+            "mode": null,
+            "instance": "143781220523908461.0",
+            "ts": 1385132357013,
+            "channel": "B",
+            "href": null,
+            "error": null,
+            "deviceIndex": null
+        }
+    ],
+    "count": 0,
+    "mediaType": null,
+    "instance": null
+}

@@ -1,0 +1,17 @@
+cql.cassandraNodes=162.150.2.207;162.150.2.180
+cql.datacenter.name=Cassandra
+cassandra.cluster.name=Test Cluster
+cassandra.disabled=false
+cassandra.keyspace.name=homesecurity
+event.maxCount=100
+event.ttl.sec=2592000
+cql.coreConnectionPerLocalHost=5
+cql.maxConnectionPerLocalHost=10
+cql.coreConnectionPerRemoteHost=5
+cql.maxConnectionPerRemoteHost=10
+cql.connectTimeoutMillis=1000
+cql.readTimeOutMillis=2000
+cql.keepAlive=true
+cql.connection.retry.ms=10000
+
+

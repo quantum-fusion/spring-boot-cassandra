@@ -1,0 +1,53 @@
+{
+    "functions": null,
+    "function": [],
+    "links": null,
+    "link": [],
+    "href": null,
+    "embed": null,
+    "createdAt": null,
+    "createdBy": null,
+    "modifiedAt": null,
+    "modifiedBy": null,
+    "entry": [
+        {
+            "cause": null,
+            "value": "etherLoss",
+            "lastValue": null,
+            "metaData": [
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "isTotalStateChange",
+                    "value": "true",
+                    "lastValue": null,
+                    "mediaType": null
+                },
+                {
+                    "item": [],
+                    "meta": [],
+                    "link": [],
+                    "name": "siteId",
+                    "value": "2721",
+                    "lastValue": null,
+                    "mediaType": null
+                }
+            ],
+            "mediaType": "event/communication",
+            "id": "806277",
+            "name": null,
+            "function": null,
+            "mode": null,
+            "instance": null,
+            "ts": 1402512514102,
+            "channel": "S",
+            "href": null,
+            "error": null,
+            "deviceIndex": null
+        }
+    ],
+    "count": 0,
+    "mediaType": null,
+    "instance": null
+}

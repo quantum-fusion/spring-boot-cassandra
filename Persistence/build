@@ -1,0 +1,6 @@
+javac -classpath ../cassandra-driver/cassandra-driver-core-2.1.5.jar:. ../cassandra-driver/GettingStarted.java
+
+mvn install:install-file -Dfile=../cassandra-driver/cassandra-driver-core-2.1.5.jar -DgroupId=com.datastax.cassandra -DartifactId=cassandra-driver-core -Dversion=2.1.5 -Dpackaging=jar
+
+mvn clean
+mvn clean package

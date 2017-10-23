@@ -1,0 +1,229 @@
+package com.comcast.homesecurity.domain.dao;
+
+import com.comcast.homesecurity.domain.pojo.Event;
+import com.comcast.homesecurity.domain.util.JsonHelper;
+import com.datastax.driver.core.*;
+
+import org.apache.commons.lang.SerializationException;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+public class EventDao {
+    private static final Logger logger = Logger.getLogger(EventDao.class);
+
+    protected Session cqlSession;
+	
+    private int maxCount = 100;
+    private static final String COLUMN_KEY_DELIMITER = "_";
+    private static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String TIME_FORMAT = "HHmmss";
+    private final SimpleDateFormat sdf;
+    private final SimpleDateFormat sdtf;
+    private PreparedStatement saveEventStmt;
+    private PreparedStatement saveTimelineEventStmt;
+    private PreparedStatement getTimelineEvents;
+    private String getEventStmtTemplate;
+    private boolean disabled;
+    //insert event ttl=2592000 seconds (30days)
+    private int eventTtl = 2592000;
+
+    public EventDao(Session session) {
+		this.cqlSession = session;
+		sdf = new SimpleDateFormat(DATE_FORMAT);
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		sdtf = new SimpleDateFormat(DATE_FORMAT + COLUMN_KEY_DELIMITER + TIME_FORMAT);
+        sdtf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        
+	}
+    
+    public void init() {
+        if (disabled) {
+            return;
+        }
+        getEventStmtTemplate = "SELECT eventContent from eventsByDate where eventDateTime in ({0})";
+        saveEventStmt = cqlSession.prepare("UPDATE eventsByDate SET eventContent=? WHERE eventDateTime=? and eventId=?");
+
+        saveTimelineEventStmt = cqlSession.prepare("INSERT INTO eventtimeline(siteId,time_taken,event) VALUES (?,?,?) USING TTL ?");
+        getTimelineEvents = cqlSession.prepare("SELECT * FROM eventtimeline WHERE siteId=? AND time_taken > ? AND time_taken < ? LIMIT ?");
+    }
+
+    public void destroy () {
+        if (disabled) {
+            return;
+        }
+        logger.warn("disconnecting from cassandra cluster");
+        cqlSession.close();
+    }
+
+    public void saveBulkEvents(Event event) throws IOException {
+        BoundStatement boundStatement = saveEventStmt.bind(
+                JsonHelper.toJSON(event).toString(), truncateTimeToHour(event.getTimestamp())/1000,
+                Long.valueOf(event.getEventId()));
+        cqlSession.execute(boundStatement);
+    }
+
+    public List <Event> getBulkEvents (long startDate, long endDate, int batchSize, int offset) throws IOException {
+        List <Event> events = new ArrayList <Event> ();
+        String retrieveStatement = new MessageFormat(getEventStmtTemplate).format(new String[]
+                {buildTimeSeries(startDate, endDate)});
+        ResultSet resultSet = cqlSession.execute(retrieveStatement);
+        List <Row> rows = resultSet.all();
+        for (Row row : rows) {
+            events.add(JsonHelper.fromJSONString(row.getString("eventContent"), Event.class));
+        }
+        return events.subList(offset, offset + batchSize > events.size() ? events.size() : offset + batchSize);
+    }
+
+    String buildTimeSeries(long startDate, long endDate) {
+        startDate = truncateTimeToHour(startDate*1000);
+        endDate = roundUpTimeToHour(endDate*1000);
+        long nextDate = DateUtils.addHours(new Date(startDate), 1).getTime();
+        StringBuffer timeSeries = new StringBuffer(String.valueOf(startDate/1000)).append(",");
+
+        while (nextDate < endDate) {
+            timeSeries.append(new StringBuffer(String.valueOf(nextDate/1000))).append(",");
+            nextDate = DateUtils.addHours(new Date(nextDate), 1).getTime();
+        }
+        return timeSeries.append(new StringBuffer(String.valueOf(endDate/1000))).toString();
+    }
+
+    long truncateTimeToHour(long startDate) {
+        return DateUtils.truncate(new Date(startDate), Calendar.HOUR).getTime();
+    }
+
+    long roundUpTimeToHour(long timeMsec) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeMsec);
+        long roundedTime = timeMsec;
+        if (calendar.get (Calendar.MINUTE) > 0) {
+            roundedTime = DateUtils.truncate(DateUtils.add(new Date(timeMsec), Calendar.MINUTE, 59), Calendar.HOUR).getTime();
+        }
+        return roundedTime;
+    }
+
+    /**
+     * Save the event
+     * The event is saved using the row key siteId + eventTimestamp in yyyyMMdd format
+     * @param siteId
+     * @param event
+     */
+    public void saveEvent(final String siteId, Event event) {
+        try {
+        	event.setSiteId(siteId); 
+ 	        String timestampStr = formatEventTimeStamp(event.getTimestamp());
+            saveEventCf(siteId, timestampStr, event.getEventId(),  JsonHelper.toJSON(event));
+        }
+        catch(Exception e) {
+            throw new SerializationException(String.format("Failed to serialize event. siteId[%s]  event[%s]", siteId, event.toString()), e);
+        }
+    }
+
+	public String formatEventTimeStamp(long l) {
+		String timestampStr = sdtf.format(new Date(l));
+		return timestampStr;
+	}
+
+    protected void saveEventCf(final String rowKey, String timestampStr, String eventId, String jsonString) throws SerializationException, IOException {
+    	
+        if(StringUtils.isNotBlank(rowKey)) {
+        	
+        	
+            BoundStatement boundStatement = new BoundStatement(saveTimelineEventStmt);
+        	String columnKey = timestampStr + COLUMN_KEY_DELIMITER + eventId;
+        	cqlSession.execute(boundStatement.bind(rowKey, columnKey, jsonString, eventTtl));
+         }
+        else {
+            logger.warn("Failed to log event due to empty rowKey[" + rowKey + "]" + jsonString);
+        }
+    }
+    
+    public List<Event> getEvents(final String siteId, final Date start, final Date end) throws SerializationException {
+    	return getEvents(siteId, start, end, maxCount);
+    }
+    
+    /**
+     * 
+     * @param siteId - homesecurity site id
+     * @param start  - start date of event
+     * @param end - end date of event, if null present date is used as end
+     * @param count - event count limit
+     * @return List of sorted events 
+     */
+    
+    public List<Event> getEvents(final String siteId, final Date start, final Date end, final int count) throws SerializationException {
+    	ArrayList<Event> events = new ArrayList<Event>();
+    	String startDateStr = sdf.format(start);
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(end);
+    	calendar.add(Calendar.DATE, 1);
+    	String endDateStr = sdf.format(calendar.getTime());
+    	ArrayList<String> eventList = (ArrayList <String>) getEventsCf(siteId, startDateStr, endDateStr, count);
+    	
+    	for (String eventJson : eventList ){
+    		try {
+				events.add(JsonHelper.fromJSONString(eventJson, Event.class));
+			} catch (Exception e) {
+				logger.error("Exception in json transfer");
+		         throw new SerializationException(String.format("Failed to get events. siteId[%s] start[%s] end[%s] count[%s]", siteId, start, end, count), e);				
+			} 
+    	}
+    	
+    	return events;
+    }
+        
+    /**
+     * 
+     * @param siteId - homesecurity site id
+     * @param startDate  - start date of event
+     * @param endDate -  end date of event, if null present date is used as end
+     * @param count - event count limit
+     * @return List of sorted events as Json strings
+     */
+    protected List<String> getEventsCf(final String siteId, final String startDate,  final String endDate, int count) throws SerializationException {
+    	ArrayList<String> list = new ArrayList<String>();
+        
+    	try {
+    		BoundStatement boundStatement = new BoundStatement(getTimelineEvents);
+    		boundStatement.bind(siteId, startDate, endDate, count);
+    		ResultSet rs = cqlSession.execute(boundStatement);
+    		for(Row row : rs) {
+    			logger.debug(row.getString("siteid") +"::"+ row.getString("event"));
+    			list.add(row.getString("event"));
+    		}
+    		return list;
+        } catch (Exception ex) {
+           logger.error("hector exception " + ex);
+           throw new SerializationException(String.format("Failed to get event. siteId[%s] start[%s] end[%s] count[%s]", siteId, startDate, endDate, count), ex);
+        }
+    }
+
+    public int getMaxCount() {
+		return maxCount;
+	}
+
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
+	}
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+	public void setEventTtl(int eventTtl) {
+		this.eventTtl = eventTtl;
+	}
+}

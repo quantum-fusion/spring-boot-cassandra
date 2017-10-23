@@ -1,0 +1,171 @@
+package com.comcast.homesecurity.domain.pojo;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.junit.*;
+
+import java.io.File;
+import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class EventTest {
+
+	private Event event;
+	private long timestamp;
+	private static final Logger logger = Logger.getLogger(EventTest.class);
+	static String thermostatEvent;
+	static String eventBusThermostatEvent;
+	static String eventBusTemperatureEvent;
+	static String eventBusOperationEvent;
+	static String eventBusLightEvent;
+	static String communicationEvent;
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		thermostatEvent = FileUtils.readFileToString(new File("src/test/resources/thermostatEvent.json"));
+		communicationEvent = FileUtils.readFileToString(new File("src/test/resources/communicationEvent.json"));
+		eventBusThermostatEvent = FileUtils.readFileToString(new File("src/test/resources/kodiak-ThermostatEvent.json"));
+		eventBusTemperatureEvent = FileUtils.readFileToString(new File("src/test/resources/kodiak-TemperatureEvent.json"));
+		eventBusOperationEvent = FileUtils.readFileToString(new File("src/test/resources/kodiak-OperationEvent.json"));
+		eventBusLightEvent = FileUtils.readFileToString(new File("src/test/resources/kodiak-LightEvent.json"));
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {}
+
+	@Before
+	public void setUp() throws Exception {
+		event =  new Event("id1","name1","media1", "channel1","instance1",timestamp,"123", new HashMap <String,String>());
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test public void testNewEvent()
+	{
+		timestamp = System.currentTimeMillis();
+		event =  new Event("id1","name1","media1", "channel1","instance1",timestamp,"123", new HashMap <String,String>() );
+		assertEquals("id1", event.getEventId());
+	}
+	
+	@Test
+	public void testGetEventId() {
+		assertEquals("id1", event.getEventId());
+	}
+
+
+	@Test
+	public void testGetEventName() {
+		assertEquals("name1", event.getEventName());
+	}
+
+	@Test
+	public void testGetMediaType() {
+		assertEquals("media1", event.getMediaType());;
+	}
+
+	@Test
+	public void testGetChannel() {
+		assertEquals("channel1", event.getChannel());
+	}
+ 
+ 	@Test
+	public void testGetInstance() {
+		assertEquals("instance1", event.getInstance());
+	}
+ 
+	@Test
+	public void testGetValue() {
+		assertEquals("123", event.getValue());
+	}
+
+	@Test
+	public void testGetTimestamp() {
+		assertEquals(timestamp, event.getTimestamp());
+	}
+
+	@Test
+	public void testEqualsObject() {
+		assertTrue(event.equals(event));
+	}
+
+	@Test
+	public void testHashCode() {
+		assertEquals(event.hashCode(), event.hashCode());
+	}
+
+	@Test
+	public void testCreateInstanceThermostat() throws JSONException {
+	    Event event = Event.createInstance1(thermostatEvent);
+	    logger.debug("created event:" + event);
+	    assertEquals("473486",event.getEventId());
+	    assertEquals(9,event.getMetadata().size());
+	    assertEquals("1819",event.getSiteId());
+	    
+	}
+
+    @Test
+    public void testCreateInstanceCommunicationEvent() throws JSONException {
+        Event event = Event.createInstance1(communicationEvent);
+        logger.debug("created event:" + event);
+        assertEquals("806277",event.getEventId());
+        assertEquals(1,event.getMetadata().size());
+        assertEquals("2721",event.getSiteId());
+        assertEquals("etherLoss", event.value);
+    }
+	@Test
+	public void testCreateInstance_eventBusTemperature() throws JSONException {
+	    Event event = Event.createInstance1(eventBusTemperatureEvent);
+	    logger.debug("created event:" + event);
+	    assertEquals("663517",event.getEventId());
+	    assertEquals("1831",event.getSiteId());
+	    assertEquals("thermostat/temperature", event.getMediaType());
+	    assertEquals(1402597748518L, event.getTimestamp());
+	    assertEquals("143781220544017405.0", event.getInstance());
+	    
+	    assertEquals(8,event.getMetadata().size());
+	}
+
+	@Test
+	public void testCreateInstance_eventBusThermostat() throws JSONException {
+	    Event event = Event.createInstance1(eventBusThermostatEvent);
+	    logger.debug("created event:" + event);
+	    assertEquals("663416",event.getEventId());
+	    assertEquals("1831",event.getSiteId());
+	    assertEquals("instance/thermostat", event.getMediaType());
+	    assertEquals(1402585851949L, event.getTimestamp());
+	    assertEquals("143781220544017405.0", event.getInstance());
+	    
+	    assertEquals(8,event.getMetadata().size());
+	}
+	
+	@Test
+	public void testCreateInstance_eventBusLight() throws JSONException {
+	    Event event = Event.createInstance1(eventBusLightEvent);
+	    logger.debug("created event:" + event);
+	    assertEquals("663143",event.getEventId());
+	    assertEquals("1831",event.getSiteId());
+	    assertEquals("instance/light", event.getMediaType());
+	    assertEquals(1402533275871L, event.getTimestamp());
+	    assertEquals("13000d6f0002f7fab9.1.0", event.getInstance());
+	    
+	    assertEquals(3,event.getMetadata().size());
+	}
+	
+	@Test
+	public void testCreateInstance_eventBusOperationEvent() throws JSONException {
+	    Event event = Event.createInstance1(eventBusOperationEvent);
+	    logger.debug("created event:" + event);
+	    assertEquals("134982",event.getEventId());
+	    assertEquals("1831",event.getSiteId());
+	    assertEquals("operation/success", event.getMediaType());
+	    assertEquals(1402598037830L, event.getTimestamp());
+	    assertEquals(null, event.getInstance());
+	    
+	    assertEquals(1,event.getMetadata().size());
+	}	
+}

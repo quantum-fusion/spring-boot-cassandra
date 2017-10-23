@@ -1,0 +1,42 @@
+{
+	"functions": null,
+	"modifiedAt": null,
+	"createdBy": null,
+	"modifiedBy": null,
+	"createdAt": null,
+	"icEvent": [{
+		"cause": null,
+		"ts": 1402533275871,
+		"instanceId": "13000d6f0002f7fab9.1.0",
+		"mediaType": "instance/light",
+		"lastValue": null,
+		"id": "663143",
+		"lastDuration": null,
+		"siteId": "1831",
+		"instanceName": null,
+		"value": null,
+		"context": [{
+			"value": "0",
+			"href": "sites/1831/network/instances/13000d6f0002f7fab9.1.0/points/energyUsage",
+			"mediaType": "energyMeter/level"
+		}, {
+			"value": "100",
+			"href": "sites/1831/network/instances/13000d6f0002f7fab9.1.0/points/level",
+			"mediaType": "light/level"
+		}, {
+			"value": "true",
+			"href": "sites/1831/network/instances/13000d6f0002f7fab9.1.0/points/isOn",
+			"mediaType": "light/on"
+		}],
+		"errorCode": null,
+		"href": "sites/1831/network/instances/13000d6f0002f7fab9.1.0",
+		"channel": "B",
+		"metaData": [],
+		"deviceId": "000d6f0002f7fab9.1"
+	}],
+	"link": [],
+	"links": null,
+	"href": null,
+	"embed": null,
+	"function": []
+}
