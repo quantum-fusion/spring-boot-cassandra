@@ -1,0 +1,44 @@
+17:05:12 default 423  [main] DEBUG o.s.core.env.StandardEnvironment - Adding [systemProperties] PropertySource with lowest search precedence
+17:05:12 default 426  [main] DEBUG o.s.core.env.StandardEnvironment - Adding [systemEnvironment] PropertySource with lowest search precedence
+17:05:12 default 426  [main] DEBUG o.s.core.env.StandardEnvironment - Initialized StandardEnvironment with PropertySources [systemProperties,systemEnvironment]
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/]}" onto public java.lang.String server.ServletController.index()
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/helloworld]}" onto public java.lang.String server.ServletController.helloworld()
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/postMessage],methods=[POST]}" onto public java.lang.String server.ServletController.postMessage(java.lang.String)
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/greeting]}" onto public java.lang.String server.ServletController.greeting(java.lang.String)
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/addRestaurant],methods=[POST]}" onto public java.lang.String server.ServletController.addRestaurant(java.lang.String)
+17:05:12 default 576  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/addTable],methods=[POST]}" onto public java.lang.String server.ServletController.addTable(java.lang.String)
+17:05:12 default 577  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/getRestaurants]}" onto public java.util.ArrayList<java.lang.String> server.ServletController.getRestaurants()
+17:05:12 default 577  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/getTables],methods=[POST]}" onto public java.util.ArrayList<java.lang.String> server.ServletController.getTables(java.lang.String)
+17:05:12 default 577  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/reserveTable],methods=[POST]}" onto public java.lang.String server.ServletController.reserveTable(java.lang.String)
+17:05:12 default 577  [main] INFO  o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Mapped "{[/leaveTable],methods=[POST]}" onto public java.lang.String server.ServletController.leaveTable(java.lang.String)
+17:05:12 default 898  [main] DEBUG org.jboss.logging - Logging Provider: org.jboss.logging.Slf4jLoggerProvider
+17:05:12 default 899  [main] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 5.1.3.Final
+17:05:12 default 904  [main] DEBUG o.h.v.i.e.r.DefaultTraversableResolver - Cannot find javax.persistence.Persistence on classpath. Assuming non JPA 2 environment. All properties will per default be traversable.
+17:05:12 default 912  [main] DEBUG o.h.v.i.engine.ConfigurationImpl - Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+17:05:12 default 914  [main] DEBUG o.h.v.i.engine.ConfigurationImpl - Setting custom ParameterNameProvider of type com.sun.proxy.$Proxy16
+17:05:12 default 919  [main] DEBUG o.h.v.i.xml.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+17:05:12 default 923  [main] DEBUG o.h.v.i.xml.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+17:05:12 default 965  [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.test.web.servlet.setup.StubWebApplicationContext@56235b8e
+17:05:12 default 1024 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Initializing servlet ''
+17:05:12 default 1034 [main] DEBUG o.s.w.c.s.StandardServletEnvironment - Adding [servletConfigInitParams] PropertySource with lowest search precedence
+17:05:12 default 1034 [main] DEBUG o.s.w.c.s.StandardServletEnvironment - Adding [servletContextInitParams] PropertySource with lowest search precedence
+17:05:12 default 1036 [main] DEBUG o.s.w.c.s.StandardServletEnvironment - Adding [systemProperties] PropertySource with lowest search precedence
+17:05:12 default 1037 [main] DEBUG o.s.w.c.s.StandardServletEnvironment - Adding [systemEnvironment] PropertySource with lowest search precedence
+17:05:12 default 1037 [main] DEBUG o.s.w.c.s.StandardServletEnvironment - Initialized StandardServletEnvironment with PropertySources [servletConfigInitParams,servletContextInitParams,systemProperties,systemEnvironment]
+17:05:12 default 1037 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring FrameworkServlet ''
+17:05:12 default 1037 [main] INFO  o.s.t.w.s.TestDispatcherServlet - FrameworkServlet '': initialization started
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Unable to locate MultipartResolver with name 'multipartResolver': no multipart request handling provided
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Using LocaleResolver [org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver@5e7cd6cc]
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Using ThemeResolver [org.springframework.web.servlet.theme.FixedThemeResolver@68c9d179]
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Using RequestToViewNameTranslator [org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@d554c5f]
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Using FlashMapManager [org.springframework.web.servlet.support.SessionFlashMapManager@2dfaea86]
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Published WebApplicationContext of servlet '' as ServletContext attribute with name [org.springframework.web.servlet.FrameworkServlet.CONTEXT.]
+17:05:12 default 1040 [main] INFO  o.s.t.w.s.TestDispatcherServlet - FrameworkServlet '': initialization completed in 3 ms
+17:05:12 default 1040 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Servlet '' configured successfully
+17:05:13 default 1071 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - DispatcherServlet with name '' processing GET request for [/]
+17:05:13 default 1073 [main] DEBUG o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Looking up handler method for path /
+17:05:13 default 1074 [main] DEBUG o.s.t.w.s.s.StandaloneMockMvcBuilder$StaticRequestMappingHandlerMapping - Returning handler method [public java.lang.String server.ServletController.index()]
+17:05:13 default 1075 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Last-Modified value for [/] is: -1
+17:05:13 default 1096 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Written [Greetings from Rest Server!] as "application/json;charset=UTF-8" using [org.springframework.http.converter.StringHttpMessageConverter@3576ddc2]
+17:05:13 default 1096 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Null ModelAndView returned to DispatcherServlet with name '': assuming HandlerAdapter completed request handling
+17:05:13 default 1096 [main] DEBUG o.s.t.w.s.TestDispatcherServlet - Successfully completed request
