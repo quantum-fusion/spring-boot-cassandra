@@ -1,0 +1,3 @@
+# cp /Users/hottelet/Desktop/rest-server-demo/rest-server/server/out/artifacts/gs_rest_service_jar/gs-rest-service.jar .
+
+docker build -t joethecoder2/rest-server .
