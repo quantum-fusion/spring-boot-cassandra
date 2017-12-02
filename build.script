@@ -1,4 +1,0 @@
-
-mvn install:install-file -Dfile=./Persistence/target/persistence.jar -DgroupId=com.persistence  -DartifactId=persistence -Dversion=1.0 -Dpackaging=jar
-
-mvn clean package
