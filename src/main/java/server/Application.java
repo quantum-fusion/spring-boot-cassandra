@@ -28,18 +28,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import com.persistence.pojo.Orm;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.annotation.Bean;
-
 @SpringBootApplication
-@ComponentScan("server, com.persistence")
-@ImportResource("classpath*:spring/spring-config.xml")
+//@ComponentScan("server, persistence")
+//@ImportResource("classpath*:spring/spring-config.xml")
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);

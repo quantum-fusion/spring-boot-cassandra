@@ -1,9 +1,0 @@
-DROP KEYSPACE homesecurity;
-/***********************************************************
- * create homesecurity keyspace with network topology strategy
- * and 2 replicates in 1 datacenters
-***********************************************************/
-CREATE KEYSPACE homesecurity
-  WITH placement_strategy = 'org.apache.cassandra.locator.NetworkTopologyStrategy'
-  AND strategy_options = {DC1:2};
-

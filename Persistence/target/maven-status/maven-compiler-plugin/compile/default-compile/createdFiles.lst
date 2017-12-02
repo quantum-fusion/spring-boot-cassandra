@@ -1,5 +1,0 @@
-com/persistence/pojo/Orm.class
-com/persistence/util/JsonHelper.class
-com/persistence/cql/SessionFactory.class
-com/persistence/CustomException.class
-com/persistence/cql/ClusterFactory.class

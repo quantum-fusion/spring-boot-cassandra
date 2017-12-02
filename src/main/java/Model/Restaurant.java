@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by hottelet on 10/23/17.
  */
+
 public class Restaurant implements Serializable {
 
     static final long serialVersionUID = 1L; //assign a long value

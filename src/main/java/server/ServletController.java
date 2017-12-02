@@ -20,56 +20,46 @@
 
 package server;
 
-import com.persistence.pojo.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+// import org.springframework.ui.Model;
+import persistence.Connect.*;
+import Model.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
 
-import org.springframework.stereotype.Service;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 
 @RestController
-@ComponentScan("server, com.persistence")
+//@RequestMapping("/product")
+//@Api(value="onlinestore", description="Operations pertaining to Rest API Server")
+@ComponentScan("server, persistence")
 public class ServletController {
     private static final Logger logger = LoggerFactory.getLogger(ServletController.class);
 
     @Autowired
-    private com.persistence.pojo.Orm p;
+    private persistence.Connect.SessionUtil p;
 
     ServletController() {
     }
 
     @Autowired
-    ServletController(Orm s) {
+    ServletController(SessionUtil s) {
 
         this.p = s;
 
@@ -78,9 +68,9 @@ public class ServletController {
             s.connect("127.0.0.1");
           //  s.setupPooling("127.0.0.1");
 
-            s.createSchema("accounts");
-            s.createTable("accounts");
-            s.createIndex("accounts");
+     //       s.createSchema("accounts");
+     //       s.createTable("accounts");
+     //       s.createIndex("accounts");
 
         } catch (Exception e) {
             logger.error("ServletController::ServletController(): Here is some ERROR: " + e);
@@ -88,9 +78,21 @@ public class ServletController {
 
     }
 
+    @ApiOperation(value = "View a list of available products",response = Iterable.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    }
+    )
+    @RequestMapping(value = "/list", method= RequestMethod.GET, produces = "application/json")
+    public String list(){
+        //Iterable<Product> productList = productService.listAllProducts();
+        return "";
+    }
 
-
-
+    @ApiOperation(value = "Greetings from Rest Server")
     @RequestMapping("/")
     public String index() {
 
@@ -133,7 +135,7 @@ public class ServletController {
             ObjectMapper mapper = new ObjectMapper();
             Model.Restaurant value = mapper.readValue(json, Model.Restaurant.class);
 
-            p.setRestaurants("accounts",value.getRestaurantId(), value.getCuisine(), value.getSeating());
+   //ToDo         p.setRestaurants("accounts",value.getRestaurantId(), value.getCuisine(), value.getSeating());
 
             return "200/OK";
 
@@ -160,7 +162,7 @@ public class ServletController {
             ObjectMapper mapper = new ObjectMapper();
             Model.Table value = mapper.readValue(json, Model.Table.class);
 
-            p.setTables("accounts", value.getTableId(),value.getRestaurantId(),value.getSeatNumber());
+ //ToDo           p.setTables("accounts", value.getTableId(),value.getRestaurantId(),value.getSeatNumber());
 
             return "200/OK";
 
@@ -184,7 +186,7 @@ public class ServletController {
         String cql = "SELECT * FROM accounts.restaurants allow filtering;";
         logger.debug("cql: " + cql);
         try {
-            restaurantList = p.getRestaurants(p.querySchema("accounts", cql));
+//ToDo            restaurantList = p.getRestaurants(p.querySchema("accounts", cql));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -209,7 +211,7 @@ public class ServletController {
         logger.debug("cql: " + cql);
 
         try {
-             tableList = p.getTables(p.querySchema("accounts", cql));
+ //ToDo            tableList = p.getTables(p.querySchema("accounts", cql));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -221,6 +223,8 @@ public class ServletController {
     /*
 
     Feature A. Reserve a table for a group of customers, by looking up the table by TableId.
+
+     suggesting NapSack algorithm
 
     Added feature B, is to lookup by group size, if a group size is between 7 and 10, multiple tables need to be joined.
      It should reserve the most optimal table (e.g. a group of 3 should be seated in a table of 4, if available
@@ -243,10 +247,20 @@ public class ServletController {
             ObjectMapper mapper = new ObjectMapper();
             Model.Table value = mapper.readValue(json, Model.Table.class);
 
-            p.getTables("accounts", value.getTableId());
+            // split order of 10 seats into two orders with 7 and 3.
 
-            /* Implement me, feature B. */
             // tableList = p.getTables(("accounts", cql));
+//            if(value.getSeatNumber())
+//            {
+//                Integer quantityremainder = 0;
+//                // first order for 7, returns remainder.
+//                quantityremainder = p.getTables("accounts", value.getTableId(), value.getSeatNumber());
+//
+//                // second order for 3.
+//                p.getTables("accounts", value.getTableId(), quantityremainder);
+//            }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,7 +287,7 @@ public class ServletController {
             ObjectMapper mapper = new ObjectMapper();
             Model.Table value = mapper.readValue(json, Model.Table.class);
 
-            p.setTables("accounts", value.getTableId(),value.getRestaurantId(),value.getSeatNumber());
+//ToDo            p.setTables("accounts", value.getTableId(),value.getRestaurantId(),value.getSeatNumber());
 
         } catch (Exception e) {
             e.printStackTrace();

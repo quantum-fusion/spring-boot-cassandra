@@ -1,8 +1,0 @@
-USE homesecurity;
-
-CREATE TABLE eventsByDate (
-      eventDateTime bigint,
-      eventId bigint,
-      eventContent text,
-      PRIMARY KEY (eventDateTime, eventId)
-    ) WITH COMPACT STORAGE;
