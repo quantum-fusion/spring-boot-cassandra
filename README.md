@@ -9,7 +9,7 @@
  :: Spring Boot ::        (v1.4.2.RELEASE)
 
 
-# spring-boot-cassandra Project
+# spring-boot-cassandra Project (This is being deprecated by https://github.com/quantum-fusion/springboot_swagger_example-master-cassandra )
 
 #Step1: get Apache Cassandra running
 
